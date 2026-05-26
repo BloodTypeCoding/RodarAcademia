@@ -8,11 +8,11 @@ export default function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación de credenciales quemadas
-    if (email === "ejemplo@correo.com" && password === "12345678") {
+    // Aquí están tus credenciales exactas
+    if (email === "instructor@rodar.com" && password === "rodar2026") {
       setError("");
       alert("¡Inicio de sesión exitoso!");
-      // Aquí podrías manejar la redirección en el futuro
+      // Aquí manejarán la redirection en el futuro
     } else {
       setError("cuenta inexistente o credenciales no válidas");
     }
