@@ -5,6 +5,8 @@ import SeccionEventos from "../components/Public/eventos.jsx";
 import React from "react";
 import GaleriaCard from "../components/Public/GaleriaCard.jsx";
 import SeccionServicios from "../components/Public/SeccionServicios.jsx";
+import FooterInfo from "../components/Public/FooterInfo.jsx";
+import Testimonios from "../components/Public/Testimonios.jsx";
 
 function Public() {
   return (
@@ -16,6 +18,8 @@ function Public() {
       <SeccionEventos />
       <GaleriaCard />
       <SeccionServicios />
+      <Testimonios />
+      <FooterInfo />
     </div>
   );
 }

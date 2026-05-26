@@ -1,8 +1,11 @@
 // src/components/Hero.jsx
 import React from 'react';
 import heroSkaters from '../../assets/hero-skaters.png'; // Asegúrate de que esta imagen tenga fondo transparente para un mejor efecto visual
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative w-full min-h-150 flex items-center bg-[#FFFBF4] overflow-hidden px-10 md:px-20" id='inicio'>
       
@@ -23,14 +26,14 @@ export const Hero = () => {
         <div className="relative w-full max-w-2xl">
           {/* Forma Cian Principal (Botones) */}
           <div className="relative z-20 flex items-center bg-[#00D1FF] rounded-full px-12 py-6 shadow-lg w-fit">
-            <button className="text-white font-Enlaces font-bold text-sm uppercase tracking-wider hover:opacity-80 transition-opacity cursor-pointer">
+            <button className="text-white font-Enlaces font-bold text-sm uppercase tracking-wider hover:opacity-80 transition-opacity cursor-pointer" onClick={() => navigate('/login')}>
               Iniciar Sesión
             </button>
             
             {/* Divisor vertical */}
             <div className="h-8 w-px bg-white/40 mx-8"></div>
             
-            <button className="text-white font-Enlaces font-bold text-sm uppercase tracking-wider hover:opacity-80 transition-opacity cursor-pointer">
+            <button className="text-white font-Enlaces font-bold text-sm uppercase tracking-wider hover:opacity-80 transition-opacity cursor-pointer" onClick={() => navigate('/register')}>
               Inscríbete
             </button>
           </div>

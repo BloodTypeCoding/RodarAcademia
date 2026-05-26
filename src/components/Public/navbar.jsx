@@ -56,11 +56,11 @@ export default function Navbar() {
 
       {/* 3. BOTONES - Derecha */}
       <div className="flex items-center space-x-6">
-        <button className="text-sm font-semibold text-gray-800 hover:text-blue-500 transition" onClick={() => navigate('/login')}>
+        <button className="text-sm font-Enlaces text-gray-800 hover:text-blue-500 transition" onClick={() => navigate('/login')}>
           Iniciar Sesión
         </button>
         <div className="h-8 w-px bg-gray-300"></div> {/* Línea divisoria */}
-        <button className="text-sm font-semibold text-gray-800 hover:text-blue-500 transition" onClick={() => navigate('/register')}>
+        <button className="text-sm font-Enlaces text-gray-800 hover:text-blue-500 transition" onClick={() => navigate('/register')}>
           Inscríbete
         </button>
       </div>
