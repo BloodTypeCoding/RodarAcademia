@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rocar Academia – Portal del Alumno</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow:hidden;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#fff;font-size:14px;color:#222;}
+
+  .shell{width:100%;height:100vh;display:flex;flex-direction:column;background:#f4f7f9;}
+
+  /* TOP BAR */
+  .topbar{
+    display:flex;align-items:stretch;
+    background:#fff;border-bottom:2px solid #e0e0e0;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    flex-shrink:0;z-index:10;
+  }
+  .logo-area{
+    background:linear-gradient(160deg,#2ec6e0 0%,#1a9ab8 100%);
+    width:190px;min-width:190px;
+    display:flex;align-items:center;padding:10px 16px;gap:10px;
+  }
+  .logo-circle{
+    width:52px;height:52px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:2.5px solid rgba(255,255,255,.7);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .logo-circle svg{width:36px;height:36px;}
+  .logo-text{color:#fff;font-size:24px;font-weight:800;letter-spacing:-.5px;text-shadow:0 1px 4px rgba(0,0,0,.15);}
+  .tabs-area{display:flex;align-items:center;padding:0 20px;gap:2px;flex:1;}
+  .tab{
+    padding:12px 22px;font-size:13.5px;font-weight:500;cursor:pointer;
+    border-radius:6px 6px 0 0;color:#555;
+    border:1px solid transparent;border-bottom:none;background:transparent;
+    white-space:nowrap;transition:background .18s,color .18s;
+  }
+  .tab:hover{background:#f0f4f6;color:#1a9ab8;}
+  .tab.active{background:#e8f6fa;border-color:#c8e8f2;color:#1a9ab8;font-weight:700;}
+  .tab-icon{margin-left:auto;padding:8px 16px;display:none;align-items:center;font-size:20px;color:#1a9ab8;}
+
+  /* BODY */
+  .body-area{display:flex;flex:1;overflow:hidden;height:0;}
+
+  /* SIDEBAR — wider */
+  .sidebar{
+    width:190px;min-width:190px;
+    background:linear-gradient(180deg,#2ec6e0 0%,#1a9ab8 100%);
+    padding:24px 0 16px;display:flex;flex-direction:column;
+    box-shadow:2px 0 10px rgba(0,0,0,.08);
+  }
+  .sidebar-label{color:rgba(255,255,255,.6);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:0 20px 10px;font-weight:700;}
+  .sidebar a{
+    display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;
+    padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;
+    border-left:3px solid transparent;transition:background .18s,border-color .18s;
+  }
+  .sidebar a:hover{background:rgba(255,255,255,.15);border-left-color:rgba(255,255,255,.7);}
+  .sidebar a.active{background:rgba(255,255,255,.22);border-left-color:#fff;font-weight:700;}
+  .sidebar-icon{font-size:16px;opacity:.85;}
+
+  /* CONTENT */
+  .content{flex:1;padding:28px 32px;background:#f4f7f9;overflow-y:auto;height:100%;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .section-title{
+    font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:#1a9ab8;margin-bottom:16px;padding-bottom:6px;border-bottom:2px solid #d4eef5;
+  }
+
+  /* INICIO */
+  .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px;}
+  .info-card{
+    background:#fff;border:1px solid #e2edf2;border-radius:10px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.05);transition:box-shadow .2s,transform .2s;
+  }
+  .info-card:hover{box-shadow:0 6px 20px rgba(26,154,184,.15);transform:translateY(-2px);}
+  .info-card-header{
+    background:linear-gradient(90deg,#2ec6e0,#1a9ab8);
+    padding:10px 16px;font-size:12px;font-weight:700;color:#fff;
+    letter-spacing:.05em;text-transform:uppercase;
+  }
+  .info-card-body{background:#f0fbfd;padding:16px;}
+  .card-label{font-size:11px;color:#888;font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+  .card-value{font-size:18px;font-weight:700;color:#1a9ab8;}
+  .card-sub{font-size:12px;color:#666;margin-top:3px;}
+
+  .ad-banner{
+    width:100%;height:90px;
+    background:linear-gradient(100deg,#0d0d0d 60%,#1a2a35 100%);
+    border-radius:10px;overflow:hidden;display:flex;align-items:center;
+    padding:0 24px;gap:16px;box-shadow:0 4px 16px rgba(0,0,0,.18);
+  }
+  .ad-text{color:#fff;font-size:15px;line-height:1.25;}
+  .ad-text strong{font-size:18px;font-weight:800;}
+  .ad-sub{color:#aaa;font-size:11px;margin-top:2px;}
+  .ad-sub span{color:#2ec6e0;}
+  .ad-player{
+    margin-left:auto;width:60px;height:82px;
+    background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Lionel_Messi_in_2019.jpg/220px-Lionel_Messi_in_2019.jpg') center/cover no-repeat;
+    border-radius:6px;opacity:.9;
+  }
+  .ad-btn{background:#2ec6e0;color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;padding:6px 12px;border-radius:5px;white-space:nowrap;cursor:pointer;text-transform:uppercase;}
+
+  /* HORARIOS */
+  .sched-wrap{background:#fff;border-radius:10px;border:1px solid #e2edf2;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:24px;}
+  .sched-table{width:100%;border-collapse:collapse;}
+  .sched-table thead tr{background:linear-gradient(90deg,#2ec6e0,#1a9ab8);}
+  .sched-table th{color:#fff;font-weight:700;padding:12px 20px;text-align:left;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+  .sched-table td{padding:13px 20px;border-bottom:1px solid #eef4f7;font-size:14px;color:#333;}
+  .sched-table tr:last-child td{border-bottom:none;}
+  .sched-table tbody tr:hover td{background:#f0fbfd;}
+  .sched-table tbody tr:nth-child(even) td{background:#f8fcfd;}
+  .sched-table tbody tr:nth-child(even):hover td{background:#e8f6fa;}
+  .entrenador-badge{display:inline-flex;align-items:center;gap:8px;}
+  .entrenador-avatar{
+    width:28px;height:28px;border-radius:50%;
+    background:linear-gradient(135deg,#2ec6e0,#1a6a80);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:12px;font-weight:700;
+  }
+
+  /* MAP */
+  .map-row{display:flex;gap:20px;align-items:stretch;}
+  .map-col{flex-shrink:0;}
+  .map-box{width:300px;border-radius:10px;overflow:hidden;border:1px solid #cdd;height:170px;}
+  .map-placeholder{
+    width:100%;height:100%;
+    background:linear-gradient(135deg,#c8dae8,#9bbdd4);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:#345;font-size:12px;gap:6px;
+  }
+  .map-link{display:inline-flex;align-items:center;gap:4px;color:#1a73e8;font-size:12px;margin-top:8px;text-decoration:none;}
+  .map-link:hover{text-decoration:underline;}
+  .sede-info{
+    flex:1;background:#fff;border-radius:10px;border:1px solid #e2edf2;
+    padding:20px 22px;box-shadow:0 2px 10px rgba(0,0,0,.05);
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .sede-info h3{font-size:22px;font-weight:800;color:#1a9ab8;margin-bottom:4px;}
+  .sede-link{color:#1a73e8;font-size:13px;cursor:pointer;text-decoration:underline;margin-bottom:14px;display:inline-block;}
+  .sede-divider{border:none;border-top:1px solid #e2edf2;margin:10px 0;}
+  .sede-meta{font-size:13px;color:#555;margin-bottom:6px;}
+  .sede-meta strong{color:#222;}
+  .btn-route{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(90deg,#2ec6e0,#1a9ab8);
+    color:#fff;border:none;padding:11px 22px;border-radius:8px;
+    font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.03em;
+    box-shadow:0 3px 12px rgba(26,154,184,.35);
+    transition:box-shadow .2s,transform .15s;text-decoration:none;
+    margin-top:8px;align-self:flex-start;
+  }
+  .btn-route:hover{box-shadow:0 6px 20px rgba(26,154,184,.45);transform:translateY(-1px);}
+  .btn-route svg{width:16px;height:16px;fill:#fff;}
+
+  /* PAGOS */
+  .pagos-row{display:flex;gap:28px;align-items:flex-start;}
+  .pagos-left{flex:1;}
+  .pagos-left h2{font-size:30px;font-weight:800;color:#222;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+  .checkmark{color:#fff;background:#2ec6e0;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .pagos-divider{border:none;border-top:2px solid #e0e0e0;margin:14px 0;}
+  .pagos-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+  .pagos-info-item{background:#fff;border-radius:8px;border:1px solid #e2edf2;padding:12px 16px;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+  .pi-label{font-size:10px;font-weight:700;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+  .pi-value{font-size:16px;font-weight:700;color:#222;}
+  .pi-value.green{color:#2e7d32;}
+  .otros-title{font-size:11px;font-weight:700;color:#888;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;}
+  .payment-logos{display:flex;flex-direction:column;gap:10px;}
+  .payment-logo{
+    display:flex;align-items:center;gap:12px;font-size:15px;font-weight:700;
+    padding:10px 16px;border-radius:8px;background:#fff;border:1px solid #e2edf2;
+    box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .18s,transform .15s;
+  }
+  .payment-logo:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);transform:translateY(-1px);}
+
+  /* PAGOFACIL — RIGHT */
+  .pagofacil{
+    width:260px;min-width:260px;border:1px solid #dde8ec;border-radius:12px;
+    overflow:hidden;background:#fff;box-shadow:0 4px 20px rgba(0,0,0,.1);flex-shrink:0;
+  }
+  .pagofacil-top{
+    background:linear-gradient(90deg,#2ec6e0,#1a9ab8);
+    padding:14px 18px;display:flex;align-items:center;gap:8px;
+  }
+  .pagofacil-top span{color:#fff;font-size:15px;font-weight:800;}
+  .pagofacil-body{padding:16px 18px;}
+  .pago-recibido{display:flex;align-items:center;gap:6px;font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:8px;}
+  .pago-monto{font-size:26px;font-weight:800;color:#222;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #eee;}
+  .pago-detalles{font-size:10px;color:#999;margin-bottom:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+  .pago-row{display:flex;gap:8px;font-size:12px;color:#444;margin-bottom:7px;align-items:flex-start;}
+  .pago-row svg{flex-shrink:0;margin-top:1px;}
+  .pago-row strong{color:#222;}
+  .pago-total-row{display:flex;justify-content:space-between;font-size:12px;margin-top:10px;border-top:1px solid #eee;padding-top:8px;color:#555;}
+  .pago-gracias{text-align:center;font-size:11px;color:#888;margin-top:10px;font-style:italic;}
+  .badge-ok{display:inline-flex;align-items:center;gap:3px;background:#e8f5e9;color:#2e7d32;font-size:10px;border-radius:999px;padding:2px 8px;font-weight:700;}
+
+  /* NOTIFICACIONES */
+  .notif-list{display:flex;flex-direction:column;gap:14px;}
+  .notif-card{background:#fff;border:1px solid #e2edf2;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:box-shadow .2s,transform .2s;}
+  .notif-card:hover{box-shadow:0 6px 18px rgba(26,154,184,.14);transform:translateY(-2px);}
+  .notif-header{background:linear-gradient(90deg,#2ec6e0,#1a9ab8);padding:9px 16px;font-size:12px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:7px;}
+  .notif-body{background:#f0fbfd;padding:13px 16px 8px;}
+  .notif-body p{font-size:13.5px;color:#333;line-height:1.5;}
+  .notif-footer{display:flex;justify-content:flex-end;padding:6px 16px 10px;background:#f0fbfd;}
+  .btn-more{font-size:12px;color:#1a9ab8;font-weight:600;cursor:pointer;background:none;border:none;padding:4px 0;letter-spacing:.02em;}
+  .btn-more:hover{text-decoration:underline;}
+
+  @media(max-width:900px){
+    .cards-grid{grid-template-columns:1fr 1fr;}
+    .pagos-row{flex-direction:column;}
+    .pagofacil{width:100%;}
+    .map-row{flex-direction:column;}
+    .map-box{width:100%;}
+    .pagos-info-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo-area">
+      <div class="logo-circle">
+        <img src="../src/assets/logo-rodar.png" alt="Logo Rodar" style="width:100%;height:100%;object-fit:contain;" />
+      </div>
+      <span class="logo-text">Alumno</span>
+    </div>
+    <div class="tabs-area" id="tabs">
+      <div class="tab active" data-view="inicio">Inicio</div>
+      <div class="tab" data-view="horarios">Mis horarios</div>
+      <div class="tab" data-view="pagos">Pagos</div>
+      <div class="tab" data-view="notificaciones">Notificaciones</div>
+      <div class="tab-icon" id="tab-icon"></div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-area">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-label">Menú</div>
+      <a data-view="perfil"><span class="sidebar-icon">👤</span><span>Mi Perfil</span></a>
+      <a data-view="horarios"><span class="sidebar-icon">📅</span><span>Mis Horarios</span></a>
+      <a data-view="pagos"><span class="sidebar-icon">💳</span><span>Pagos</span></a>
+      <a data-view="notificaciones"><span class="sidebar-icon">🔔</span><span>Notificaciones</span></a>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- VISTA 1: INICIO -->
+      <div class="view active" id="view-inicio">
+        <div class="section-title">Resumen</div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="info-card-header">📆 &nbsp;Próximo Entrenamiento</div>
+            <div class="info-card-body">
+              <div class="card-label">Día y hora</div>
+              <div class="card-value">Martes</div>
+              <div class="card-sub">5:00 pm · Sede Santa Mónica</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-header">💰 &nbsp;Estado de Pago</div>
+            <div class="info-card-body">
+              <div class="card-label">Estado actual</div>
+              <div class="card-value">Al día ✔</div>
+              <div class="card-sub">Próximo pago: 17/04/2026</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-header">🔔 &nbsp;Notificaciones</div>
+            <div class="info-card-body">
+              <div class="card-label">Sin leer</div>
+              <div class="card-value">2 nuevas</div>
+              <div class="card-sub">Toca para ver detalles</div>
+            </div>
+          </div>
+        </div>
+        <div class="ad-banner">
+          <div style="font-size:13px;color:#aaa;font-style:italic;font-weight:900;opacity:.7;flex-shrink:0;">adidas</div>
+          <div class="ad-text">
+            <strong>every legend has a beginning...</strong>
+            <div class="ad-sub">messi miro<span>ar10</span></div>
+          </div>
+          <div class="ad-player"></div>
+          <div class="ad-btn">Shop now ›</div>
+        </div>
+      </div>
+
+      <!-- VISTA 2: HORARIOS -->
+      <div class="view" id="view-horarios">
+        <div class="section-title">Mi Horario Semanal</div>
+        <div class="sched-wrap">
+          <table class="sched-table">
+            <thead>
+              <tr><th>Día</th><th>Hora</th><th>Entrenador</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Lunes</strong></td><td>7:00 am</td><td><span class="entrenador-badge"><span class="entrenador-avatar">C</span>Carlos</span></td></tr>
+              <tr><td><strong>Miércoles</strong></td><td>3:00 pm</td><td><span class="entrenador-badge"><span class="entrenador-avatar">A</span>Andrea</span></td></tr>
+              <tr><td><strong>Jueves</strong></td><td>4:00 pm</td><td><span class="entrenador-badge"><span class="entrenador-avatar">M</span>María</span></td></tr>
+              <tr><td><strong>Sábado</strong></td><td>5:00 pm</td><td><span class="entrenador-badge"><span class="entrenador-avatar">J</span>Juan</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-title">Ubicación de la Sede</div>
+        <div class="map-row">
+          <div class="map-col">
+            <div class="map-box">
+              <div class="map-placeholder">
+                <svg width="38" height="38" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#345"/></svg>
+                <span style="font-weight:600;">Sede Santa Mónica</span>
+                <span style="font-size:11px;color:#678;">Los Ángeles, CA</span>
+              </div>
+            </div>
+            <a class="map-link" href="https://www.google.com/maps" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#1a73e8"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7z"/><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+              https://www.google.com/maps
+            </a>
+          </div>
+          <div class="sede-info">
+            <div>
+              <h3>Sede Santa Monica</h3>
+              <a class="sede-link">Cambiar de sede</a>
+              <hr class="sede-divider"/>
+              <p class="sede-meta">Mejor tiempo: <strong>35:34 minutos</strong></p>
+              <p class="sede-meta">Distancia estimada: <strong>28.4 km</strong></p>
+            </div>
+            <a class="btn-route" href="https://www.google.com/maps" target="_blank">
+              <svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+              Inicio del recorrido
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 3: PAGOS -->
+      <div class="view" id="view-pagos">
+        <div class="section-title">Estado de Pagos</div>
+        <div class="pagos-row">
+          <div class="pagos-left">
+            <h2>Pago exitoso <span class="checkmark">✔</span></h2>
+            <hr class="pagos-divider"/>
+            <div class="pagos-info-grid">
+              <div class="pagos-info-item">
+                <div class="pi-label">Monto a pagar</div>
+                <div class="pi-value green">$0</div>
+              </div>
+              <div class="pagos-info-item">
+                <div class="pi-label">Próximo pago</div>
+                <div class="pi-value">17/04/2026</div>
+              </div>
+              <div class="pagos-info-item">
+                <div class="pi-label">Pagos atrasados</div>
+                <div class="pi-value green">0</div>
+              </div>
+              <div class="pagos-info-item">
+                <div class="pi-label">Descuento aplicable</div>
+                <div class="pi-value">20% <span style="font-size:12px;color:#888;font-weight:400;">(6 meses)</span></div>
+              </div>
+            </div>
+            <div class="otros-title">Otros medios de pago</div>
+            <div class="payment-logos">
+              <div class="payment-logo" style="color:#6a1b9a;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#6a1b9a"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="7" font-weight="700" font-family="Arial">N</text></svg>
+                NEQUI
+              </div>
+              <div class="payment-logo">
+                <svg width="24" height="16" viewBox="0 0 40 18" fill="none"><rect width="40" height="18" rx="3" fill="#f5a623"/><text x="20" y="13" text-anchor="middle" fill="#fff" font-size="8" font-weight="700" font-family="Arial">BC</text></svg>
+                <span style="color:#333;">Bancolombia</span>
+              </div>
+              <div class="payment-logo" style="color:#c62828;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#c62828"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="7" font-weight="700" font-family="Arial">D</text></svg>
+                DaviPlata
+              </div>
+            </div>
+          </div>
+
+          <!-- PagoFácil receipt — right -->
+          <div class="pagofacil">
+            <div class="pagofacil-top">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <span>PagoFácil</span>
+            </div>
+            <div class="pagofacil-body">
+              <div class="pago-recibido">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#2e7d32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                ¡Pago recibido!
+              </div>
+              <div class="pago-monto">COP $120.000</div>
+              <div class="pago-detalles">Detalles del Pago</div>
+              <div class="pago-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#888"><path d="M4 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg>
+                <span>Remitente &nbsp;<strong>Rodar Academia</strong></span>
+              </div>
+              <div class="pago-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#888"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+                <span>Facturación &nbsp;<strong>23 Mar 2024</strong></span>
+              </div>
+              <div class="pago-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#888"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg>
+                <span>Referencia &nbsp;<strong>#987654321</strong></span>
+              </div>
+              <div class="pago-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#2e7d32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <span>Estado &nbsp;<span class="badge-ok">✓ Pago Exitoso</span></span>
+              </div>
+              <div class="pago-total-row">
+                <div>
+                  <div>Descripción</div>
+                  <div style="margin-top:3px;font-weight:700;color:#222;">Total Pagado</div>
+                </div>
+                <div style="text-align:right;">
+                  <div>Pago por servicios</div>
+                  <div style="margin-top:3px;font-weight:700;color:#222;">COP $120.000</div>
+                </div>
+              </div>
+              <p class="pago-gracias">¡Gracias por tu pago!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 4: NOTIFICACIONES -->
+      <div class="view" id="view-notificaciones">
+        <div class="section-title">Centro de Notificaciones</div>
+        <div class="notif-list">
+          <div class="notif-card">
+            <div class="notif-header"><span>💳</span> Pagos</div>
+            <div class="notif-body"><p>El último pago ha sido completado exitosamente.</p></div>
+            <div class="notif-footer"><button class="btn-more">Más información →</button></div>
+          </div>
+          <div class="notif-card">
+            <div class="notif-header"><span>🛡️</span> Admin</div>
+            <div class="notif-body"><p>Docente Luis Hernández López: La clase del miércoles a las 4:00 pm ha sido cancelada.</p></div>
+            <div class="notif-footer"><button class="btn-more">Más información →</button></div>
+          </div>
+          <div class="notif-card">
+            <div class="notif-header"><span>🛡️</span> Admin</div>
+            <div class="notif-body"><p>Solicitud de cambio de sede ha sido aceptada.</p></div>
+            <div class="notif-footer"><button class="btn-more">Más información →</button></div>
+          </div>
+          <div class="notif-card">
+            <div class="notif-header"><span>⚠️</span> Admin</div>
+            <div class="notif-body"><p>Recordatorio de aviso de faltas injustificadas.</p></div>
+            <div class="notif-footer"><button class="btn-more">Más información →</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MI PERFIL -->
+      <div class="view" id="view-perfil">
+        <div class="section-title">Mi Perfil</div>
+        <div class="info-card" style="max-width:400px;">
+          <div class="info-card-header">👤 &nbsp;Datos del Alumno</div>
+          <div class="info-card-body">
+            <div class="card-label">Estado</div>
+            <div class="card-value" style="font-size:14px;color:#555;">Información próximamente.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /body-area -->
+</div><!-- /shell -->
+
+<script>
+  const VIEWS = ['inicio','horarios','pagos','notificaciones','perfil'];
+  const ICONS  = {horarios:'📅',pagos:'💳',notificaciones:'🔔'};
+
+  function navigate(viewId){
+    if(!VIEWS.includes(viewId)) return;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    const t = document.getElementById('view-'+viewId);
+    if(t) t.classList.add('active');
+    document.querySelectorAll('.tab').forEach(tab=>tab.classList.toggle('active', tab.dataset.view===viewId));
+    document.querySelectorAll('.sidebar a').forEach(a=>a.classList.toggle('active', a.dataset.view===viewId));
+    const iconEl = document.getElementById('tab-icon');
+    if(ICONS[viewId]){iconEl.textContent=ICONS[viewId];iconEl.style.display='flex';}
+    else{iconEl.style.display='none';}
+  }
+
+  document.querySelectorAll('.tab[data-view]').forEach(t=>t.addEventListener('click',()=>navigate(t.dataset.view)));
+  document.querySelectorAll('.sidebar a[data-view]').forEach(a=>a.addEventListener('click',()=>navigate(a.dataset.view)));
+</script>
+</body>
+</html>
