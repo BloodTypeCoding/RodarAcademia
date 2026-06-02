@@ -1,7 +1,7 @@
 import Navbar from "../components/Public/Navbar.jsx";
 import { Hero } from "../components/Public/Hero.jsx";
 import MisionVision from "../components/Public/Mision&Vision.jsx";
-import SeccionEventos from "../components/Public/eventos.jsx";
+import SeccionEventos from "../components/Public/Eventos.jsx";
 import React from "react";
 import GaleriaCard from "../components/Public/GaleriaCard.jsx";
 import SeccionServicios from "../components/Public/SeccionServicios.jsx";
