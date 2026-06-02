@@ -20,6 +20,17 @@ export default function LoginForm() {
     } else {
       setError("Cuenta inexistente o credenciales no válidas");
     }
+
+    if (
+      email === "instructor@rodar.com" &&
+      password === "instructor2026"
+    ) {
+      setError("");
+      window.location.href = "../../../../panel-instructor.html";
+    } else {
+      setError("Cuenta inexistente o credenciales no válidas");
+    }
+
   };
 
   return (
