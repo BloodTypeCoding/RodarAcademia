@@ -1,9 +1,16 @@
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 // Si usas Next.js cambia por: import Link from 'next/link';
 
 export default function GaleriaCard() {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate('/galeria');
+  };
+
   return (
-    <a to="/galeria" className="group relative block max-w-xl mx-auto overflow-hidden rounded-2xl bg-black aspect-16/10 shadow-md cursor-pointer">
+    <div onClick={handleCardClick} className="group relative block max-w-xl mx-auto overflow-hidden rounded-2xl bg-black aspect-16/10 shadow-md cursor-pointer">
       <div className="group relative block max-w-xl overflow-hidden rounded-2xl bg-black aspect-16/10 shadow-md cursor-pointer">
         {/* Imagen de fondo */}
         <img
@@ -23,7 +30,7 @@ export default function GaleriaCard() {
           </h2>
         </div>
       </div>
-    </a     >
+    </div>
   );
 }
    
