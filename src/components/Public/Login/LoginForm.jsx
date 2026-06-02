@@ -17,16 +17,18 @@ export default function LoginForm() {
     ) {
       setError("");
       navigate("/admin");
-    } else {
-      setError("Cuenta inexistente o credenciales no válidas");
-    }
-
-    if (
+    } else if (
       email === "instructor@rodar.com" &&
       password === "instructor2026"
     ) {
       setError("");
       window.location.href = "../../../../panel-instructor.html";
+    } else if (
+      email === "alumno@rodar.com" &&
+      password === "alumno2026"
+    ) {
+      setError("");
+      window.location.href = "../../../../rocar_portal_alumno.html";
     } else {
       setError("Cuenta inexistente o credenciales no válidas");
     }
