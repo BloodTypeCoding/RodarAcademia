@@ -22,13 +22,13 @@ export default function LoginForm() {
       password === "instructor2026"
     ) {
       setError("");
-      window.location.href = "../../../../panel-instructor.html";
+      navigate("/instructor");
     } else if (
       email === "alumno@rodar.com" &&
       password === "alumno2026"
     ) {
       setError("");
-      window.location.href = "../../../../rocar_portal_alumno.html";
+      navigate("/alumno");
     } else {
       setError("Cuenta inexistente o credenciales no válidas");
     }
