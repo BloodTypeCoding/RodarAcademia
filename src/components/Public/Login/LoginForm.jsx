@@ -12,8 +12,8 @@ export default function LoginForm() {
     e.preventDefault();
 
     if (
-      email === "instructor@rodar.com" &&
-      password === "rodar2026"
+      email === "admin@rodar.com" &&
+      password === "admin2026"
     ) {
       setError("");
       navigate("/admin");
